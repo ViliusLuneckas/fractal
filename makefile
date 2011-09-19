@@ -8,3 +8,7 @@ fractal.o: fractal.cpp
 
 clean:
 	rm -f *.o fractal
+
+format:
+	astyle *.cpp --style=k/r
+	rm *.cpp.orig
