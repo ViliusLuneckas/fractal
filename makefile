@@ -10,5 +10,4 @@ clean:
 	rm -f *.o fractal
 
 format:
-	astyle *.cpp --style=k/r
-	rm *.cpp.orig
+	astyle *.cpp --style=k/r --indent=spaces=2
