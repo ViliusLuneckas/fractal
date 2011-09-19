@@ -21,7 +21,6 @@ void GLFWCALL keyhandler(int key, int action)
 
 void GLFWCALL window_resize(int w, int h)
 {
-  // avoid zero in furthers calculations
   w = (w < 1) ? 1 : w;
   h = (h < 1) ? 1 : h;
   
