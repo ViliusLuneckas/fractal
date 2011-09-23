@@ -3,12 +3,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+//screen initials
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 600;
+
 //colors
 const float RED [] = {1, 0, 0};
 const float GREEN [] = {0, 1, 0};
 const float BLUE [] = {0, 0, 1};
 const float BLACK [] = {0, 0, 0};
 const float WHITE [] = {1, 1, 1};
+const float BROWN[] ={0.5, 0.3, 0.2};
 
 const int FRACTAL_LEVEL_MIN = 0;
 const int FRACTAL_LEVEL_MAX = 6;
@@ -22,14 +28,14 @@ const int SHAPE_POINTS_N = 8;
 const point3f SHAPE_POINTS[SHAPE_POINTS_N] = {
 //big square
   {0.0, 0.0, 0.0},
-  {0.0, 0.75, 0.0},
-  {1.0, 0.75, 0.0},
+  {0.0, 0.8, 0.0},
+  {1.0, 0.8, 0.0},
   {1.0, 0.0, 0.0},
 //small square
-  {0.75, 0.75, 0.0},
-  {0.75, 1.0, 0.0},
+  {0.8, 0.8, 0.0},
+  {0.8, 1.0, 0.0},
   {1.0, 1.0, 0.0},
-  {1.0, 0.75, 0.0}
+  {1.0, 0.8, 0.0}
 };
 
 bool fractal_color = false;
@@ -101,7 +107,7 @@ void GLFWCALL window_resize(int w, int h)
 bool init_all()
 {
   if (!glfwInit()) return false;
-  if (!glfwOpenWindow(900, 700, 0, 0, 0, 0, 0, 0, GLFW_WINDOW)) {
+  if (!glfwOpenWindow(SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 0, 0, 0, GLFW_WINDOW)) {
     glfwTerminate();
     return false;
   }
@@ -117,9 +123,8 @@ void setup()
   glClearColor(1, 1, 1, 0.5);
 }
 
-void draw_fractal(int n)
+void draw_fractal(int n, bool colorable)
 {
-
   if (n == FRACTAL_LEVEL_MIN) {
     glBegin(GL_QUADS);
     for (int i = 0; i < SHAPE_POINTS_N; i++)
@@ -131,21 +136,22 @@ void draw_fractal(int n)
     glPushMatrix();
     glPushMatrix();
 
-    if (fractal_color)
+    if (colorable)
       glColor3fv(BLUE);
-
+    
     glScalef(0.5, 0.5, 1.0);
     glTranslatef(2, 1, 0);
 
     glRotatef(90, 0, 0, 1);
     glRotatef(180, 0, 1, 0);
 
-    draw_fractal(n - 1);
+    draw_fractal(n - 1, false);
 
     glPopMatrix();
 
-    if (fractal_color)
+    if (colorable)
       glColor3fv(GREEN);
+    
 
     glScalef(0.5, 0.5, 1.0);
     glTranslatef(1, 2, 0);
@@ -153,29 +159,33 @@ void draw_fractal(int n)
     glRotatef(180, 0, 1, 0);
     glRotatef(180, 0, 0, 1);
 
-    draw_fractal(n - 1);
+    draw_fractal(n - 1, false);
+
 
     glPopMatrix();
 
-    if (fractal_color)
+
+    if (colorable)
       glColor3fv(RED);
+  
 
     glScalef(0.5, 0.5, 1.0);
     glTranslatef(0, 1, 0);
 
-    draw_fractal(n - 1);
+    draw_fractal(n - 1, false);
 
     glPopMatrix();
 
-    if (fractal_color)
-      glColor3fv(BLACK);
+
+   if (colorable)
+      glColor3fv(BROWN);
 
     glScalef(0.25, 0.25, 1);
     glTranslatef(2, 1, 0);
     glRotatef(90, 0, 0, 1);
 
-    draw_fractal(n - 1);
-  }
+    draw_fractal(n - 1, false);
+}
 }
 
 int main(int argc, char** argv)
@@ -195,7 +205,7 @@ int main(int argc, char** argv)
     glLoadIdentity();
     glColor3f(0, 0, 0);
 
-    draw_fractal(fractal_level);
+    draw_fractal(fractal_level, fractal_color);
 
     glfwSwapBuffers();
 
